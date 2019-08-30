@@ -4,8 +4,9 @@ Frame::Frame(GameMap *game_map_ptr, Player *player_ptr, int rows, int cols,
     int render_dist) {
 
     picture.resize(rows);
-    for (int i=0; i<rows; i++) {
-        picture[i].resize(cols);
+    for (auto &row : picture) {
+        row = new wchar_t[cols + 1]; // Extra space for null-terminator
+        row[cols] = '\0';
     }
 
     this->game_map_ptr = game_map_ptr;
@@ -13,6 +14,12 @@ Frame::Frame(GameMap *game_map_ptr, Player *player_ptr, int rows, int cols,
     this->render_dist = render_dist;
     this->screen_rows = rows;
     this->screen_cols = cols;
+}
+
+Frame::~Frame() {
+    for (auto &row : picture) {
+        delete []row;
+    }
 }
 
 void Frame::render() {

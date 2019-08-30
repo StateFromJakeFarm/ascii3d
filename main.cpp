@@ -13,7 +13,6 @@
 
 using std::vector;
 using std::string;
-using std::wstring;
 using std::chrono::system_clock;
 using std::chrono::duration;
 using std::cout;
@@ -21,12 +20,8 @@ using std::endl;
 
 void draw(const Frame &frame) {
     move(0, 0);
-    for (int r=0; r<frame.screen_rows; r++) {
-        wstring line;
-        for (int c=0; c<frame.screen_cols; c++) {
-            line += frame.picture[r][c];
-        }
-        addwstr(line.c_str());
+    for (auto &row : frame.picture) {
+        addwstr(row);
     }
 
     wrefresh(stdscr);

@@ -17,8 +17,9 @@ class Frame {
 
     public:
     int screen_rows, screen_cols, render_dist;
-    vector< vector<short> > picture;
+    vector<wchar_t*> picture;
     Frame(GameMap*, Player*, int, int, int);
+    ~Frame();
 
     void render();
 };
