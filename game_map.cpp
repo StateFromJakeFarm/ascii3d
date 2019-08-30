@@ -1,7 +1,7 @@
 #include "game_map.h"
 
-GameMap::GameMap(string map_file) {
-    ifstream file_obj(map_file);
+GameMap::GameMap(string file) {
+    ifstream file_obj(file);
 
     try {
         string row;
@@ -21,7 +21,7 @@ GameMap::GameMap(string map_file) {
             map.push_back(row);
         }
 
-        height = i;
+        height = i+1;
     } catch (int e) {
         cerr << "Error: map must be rectangular" << endl;
         exit(1);
@@ -29,8 +29,7 @@ GameMap::GameMap(string map_file) {
 }
 
 char GameMap::at(const int row, const int col) {
-    if (row < 0 || col < 0 || row >= height || col >= height) {
-        // Return floor for out-of-bounds access
+    if (row < 0 || col < 0 || row >= height || col >= width) {
         return '.';
     }
 

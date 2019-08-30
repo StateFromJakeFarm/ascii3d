@@ -1,15 +1,13 @@
-CXXFLAGS = -g -Wall -W -Werror -pedantic
+CXXFLAGS = -std=c++11 -Wall -W -Werror -pedantic
+CXXLINKS = -lncursesw -lm
 CXX = g++
-PROG = test
+PROG = game
 
-$(PROG): game_map.o player.o
-	$(CXX) $(CXXFLAGS) -o test game_map.o test.cpp
+$(PROG): main.cpp game_map.o player.o frame.o
+	$(CXX) $(CXXFLAGS) -o $(PROG) $^ $(CXXLINKS)
 
-player.o:
-	$(CXX) $(CXXFLAGS) -c -o player.o player.cpp
-
-game_map.o:
-	$(CXX) $(CXXFLAGS) -c -o game_map.o game_map.cpp
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $< $(CXXLINKS)
 
 clean:
 	rm $(PROG) *.o
