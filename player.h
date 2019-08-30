@@ -6,21 +6,19 @@
 
 class Player {
     private:
-    // Position & orientation
+    GameMap *game_map_ptr;
     double x, y, view_angle;
-
-    // Movement stats
     double fov, walk_speed, turn_speed;
 
     public:
     // Player movement
-    Player(double, double, double, double, double, double);
-    void turn_right(double);
-    void turn_left(double);
-    void walk_forward(GameMap&, double);
-    void walk_backward(GameMap&, double);
-    void strafe_right(GameMap&, double);
-    void strafe_left(GameMap&, double);
+    Player(GameMap*, double, double, double, double, double, double);
+    void turn_right();
+    void turn_left();
+    void walk_forward();
+    void walk_backward();
+    void strafe_right();
+    void strafe_left();
 
     // Getters
     double get_x() {return x;}

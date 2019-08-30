@@ -7,6 +7,7 @@
 #include <string>
 #include <chrono>
 #include <iostream>
+#include <ctime>
 #include "game_map.h"
 #include "player.h"
 #include "frame.h"
@@ -47,21 +48,23 @@ int main(int argc, char* argv[]) {
     int screen_rows, screen_cols;
     getmaxyx(stdscr, screen_rows, screen_cols);
 
+    // Map
+    string map_file = argv[1];
+    GameMap game_map(map_file);
+
     // Player
     double p_y = 4;
     double p_x = 4;
     double p_view_angle = 0;
     double fov = M_PI / 3.0;
-    double walk_speed = 30;
-    double turn_speed = 50;
-    Player player(p_y, p_x, p_view_angle, fov, walk_speed, turn_speed);
-
-    // Map
-    string map_file = argv[1];
-    GameMap game_map(map_file);
+    double walk_speed = 0.1;
+    double turn_speed = 0.2;
+    Player player(&game_map, p_y, p_x, p_view_angle, fov, walk_speed, turn_speed);
 
     // Frame
     int render_dist = 15;
+    int frame_rate = 60;
+    double frame_period = 1 / (double)frame_rate;
     Frame frame(&game_map, &player, screen_rows, screen_cols, render_dist);
 
     int ch = 0;
@@ -78,33 +81,38 @@ int main(int argc, char* argv[]) {
         if ((ch = getch()) != ERR) {
             switch (ch) {
                 case KEY_RIGHT:
-                    player.turn_right(frame_duration);
+                    player.turn_right();
                     break;
 
                 case KEY_LEFT:
-                    player.turn_left(frame_duration);
+                    player.turn_left();
                     break;
 
                 case 'w':
-                    player.walk_forward(game_map, frame_duration);
+                    player.walk_forward();
                     break;
 
                 case 's':
-                    player.walk_backward(game_map, frame_duration);
+                    player.walk_backward();
                     break;
 
                 case 'd':
-                    player.strafe_right(game_map, frame_duration);
+                    player.strafe_right();
                     break;
 
                 case 'a':
-                    player.strafe_left(game_map, frame_duration);
+                    player.strafe_left();
                     break;
             }
         }
 
         frame.render();
         draw(frame);
+
+        // If necessary, wait enough time to ensure desired frame rate
+        if (frame_duration < frame_period) {
+            sleep(frame_period - frame_duration);
+        }
     }
 
     curs_set(1);
