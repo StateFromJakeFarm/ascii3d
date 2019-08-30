@@ -26,6 +26,10 @@ void Player::walk_forward() {
     if (game_map_ptr->at(y + step_y, x + step_x) != '#') {
         x += step_x;
         y += step_y;
+    } else if (game_map_ptr->at(y + step_y, x) != '#') {
+        y += step_y;
+    } else if (game_map_ptr->at(y, x + step_x) != '#') {
+        x += step_x;
     }
 }
 
@@ -36,7 +40,12 @@ void Player::walk_backward() {
     if (game_map_ptr->at(y - step_y, x - step_x) != '#') {
         x -= step_x;
         y -= step_y;
+    } else if (game_map_ptr->at(y - step_y, x) != '#') {
+        y -= step_y;
+    } else if (game_map_ptr->at(y, x - step_x) != '#') {
+        x -= step_x;
     }
+
 }
 
 void Player::strafe_right() {
@@ -46,6 +55,10 @@ void Player::strafe_right() {
     if (game_map_ptr->at(y - step_y, x + step_x) != '#') {
         x += step_x;
         y -= step_y;
+    } else if (game_map_ptr->at(y - step_y, x) != '#') {
+        y -= step_y;
+    } else if (game_map_ptr->at(y, x + step_x) != '#') {
+        x += step_x;
     }
 }
 
@@ -56,5 +69,9 @@ void Player::strafe_left() {
     if (game_map_ptr->at(y + step_y, x - step_x) != '#') {
         x -= step_x;
         y += step_y;
+    } else if (game_map_ptr->at(y + step_y, x) != '#') {
+        y += step_y;
+    } else if (game_map_ptr->at(y, x - step_x) != '#') {
+        x -= step_x;
     }
 }
