@@ -21,7 +21,7 @@ GameMap::GameMap(string file) {
             map.push_back(row);
         }
 
-        height = i+1;
+        height = i;
     } catch (int e) {
         cerr << "Error: map must be rectangular" << endl;
         exit(1);
