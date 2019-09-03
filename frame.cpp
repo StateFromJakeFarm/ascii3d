@@ -1,7 +1,7 @@
 #include "frame.h"
 
 Frame::Frame(GameMap *game_map_ptr, Player *player_ptr, int rows, int cols,
-    int render_dist) {
+    int render_dist, double corner_resolution) {
 
     picture.resize(rows);
     for (auto &row : picture) {
@@ -11,9 +11,10 @@ Frame::Frame(GameMap *game_map_ptr, Player *player_ptr, int rows, int cols,
 
     this->game_map_ptr = game_map_ptr;
     this->player_ptr = player_ptr;
-    this->render_dist = render_dist;
     this->screen_rows = rows;
     this->screen_cols = cols;
+    this->render_dist = render_dist;
+    this->corner_resolution = corner_resolution;
 }
 
 Frame::~Frame() {
@@ -22,8 +23,13 @@ Frame::~Frame() {
     }
 }
 
+bool Frame::is_corner(const double y_test, const double x_test) {
+    return (fabs(round(y_test) - y_test) <= corner_resolution &&
+        fabs(round(x_test) - x_test) <= corner_resolution);
+}
+
 void Frame::render() {
-    double ray_angle, dist, test_y, test_x, ceiling, floor, floor_dist_factor;
+    double ray_angle, dist, y_test, x_test, ceiling, floor, floor_dist_factor;
 
     for (int col=0; col<screen_cols; col++) {
         // Begin casting rays at left of view, casting one ray for each
@@ -31,15 +37,14 @@ void Frame::render() {
         ray_angle = (player_ptr->get_view() - player_ptr->get_fov()/2.0) +
             ((double)col / (double)screen_cols) * player_ptr->get_fov();
 
-        // Calculate distance from player to wall (or edge of map) for this
-        // ray
+        // Calculate distance from player to wall (or edge of map) for this ray
         dist = 0.0;
         do {
             dist += 0.1;
 
-            test_y = player_ptr->get_y() + cos(ray_angle) * dist;
-            test_x = player_ptr->get_x() + sin(ray_angle) * dist;
-        } while (dist <= render_dist && game_map_ptr->at(test_y, test_x) != '#');
+            y_test = player_ptr->get_y() + cos(ray_angle) * dist;
+            x_test = player_ptr->get_x() + sin(ray_angle) * dist;
+        } while (dist <= render_dist && game_map_ptr->at(y_test, x_test) != '#');
 
         // Determine floor and ceiling bounds
         ceiling = screen_rows / 2.0 - screen_rows / dist;
@@ -54,9 +59,17 @@ void Frame::render() {
             } else if (row >= ceiling && row < floor) {
                 // Wall
                 if (dist <= render_dist / 4) {
-                    val = 0x2588;
+                    if (is_corner(y_test, x_test)) {
+                        val = '|';
+                    } else {
+                        val = 0x2588;
+                    }
                 } else if (dist <= render_dist / 3) {
-                    val = 0x2593;
+                    if (is_corner(y_test, x_test)) {
+                        val = ' ';
+                    } else {
+                        val = 0x2593;
+                    }
                 } else if (dist <= render_dist / 2) {
                     val = 0x2592;
                 } else if (dist <= render_dist) {

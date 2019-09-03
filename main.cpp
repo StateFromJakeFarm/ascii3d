@@ -63,9 +63,10 @@ int main(int argc, char* argv[]) {
 
     // Frame
     int render_dist = 15;
+    double corner_resolution = 0.1;
     int frame_rate = 60;
     double frame_period = 1 / (double)frame_rate;
-    Frame frame(&game_map, &player, screen_rows, screen_cols, render_dist);
+    Frame frame(&game_map, &player, screen_rows, screen_cols, render_dist, corner_resolution);
 
     int ch = 0;
     auto prev = system_clock::now();
