@@ -1,3 +1,10 @@
+/**
+ * @file frame.cpp
+ * @author Jake Hansen
+ *
+ * Implementation of Frame class
+ */
+
 #include "frame.h"
 
 /**
@@ -35,7 +42,7 @@ Frame::Frame(GameMap *game_map_ptr, Player *player_ptr, int rows, int cols,
 }
 
 /**
- * Frame object destructor
+ * Frame object destructor.
  *
  * @return void
  */
@@ -47,7 +54,7 @@ Frame::~Frame() {
 
 /**
  * Determine if given projection collision point should be drawn with
- * special corner character instead of regular wall character
+ * special corner character instead of regular wall character.
  *
  * @param y_test Projection y coordinate
  * @param x_test Projection x coordinate

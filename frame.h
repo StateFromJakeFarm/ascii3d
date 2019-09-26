@@ -2,8 +2,8 @@
  * @file frame.h
  * @author Jake Hansen
  *
- * Header for class to render player's view within terminal emulator using ASCII
- * characters.
+ * Header for Frame class to render player's view within terminal emulator using
+ * ASCII characters.
  */
 
 #ifndef FRAME_H

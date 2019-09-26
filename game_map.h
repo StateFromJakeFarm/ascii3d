@@ -1,3 +1,11 @@
+/**
+ * @file game_map.h
+ * @author Jake Hansen
+ *
+ * Header for GameMap class to maintain positions of obstacles in the
+ * environment.
+ */
+
 #ifndef GAME_MAP_H
 #define GAME_MAP_H
 
