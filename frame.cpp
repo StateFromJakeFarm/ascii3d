@@ -1,5 +1,22 @@
 #include "frame.h"
 
+/**
+ * Frame object constructor.
+ *
+ * @param game_map_ptr Pointer to GameMap object containing player environment
+ * @param player_ptr Pointer to Player object
+ * @param rows Number of rows in terminal screen
+ * @param cols Number of cols in terminal screen
+ * @param render_dist Maximum euclidean distance an obstacle (within the map)
+ *        can be from the player's position for the object to be rendered
+ * @param corner_resolution Value in range [0, 1] denoting the minimum
+ *        distance from the connection point of a projection to the
+ *        "corner" of the obstacle it has collided with for that point to be
+ *        rendered with the corner character instead of the regular wall
+ *        character
+ *
+ * @return Frame object
+ */
 Frame::Frame(GameMap *game_map_ptr, Player *player_ptr, int rows, int cols,
     int render_dist, double corner_resolution) {
 
@@ -17,17 +34,37 @@ Frame::Frame(GameMap *game_map_ptr, Player *player_ptr, int rows, int cols,
     this->corner_resolution = corner_resolution;
 }
 
+/**
+ * Frame object destructor
+ *
+ * @return void
+ */
 Frame::~Frame() {
     for (auto &row : picture) {
         delete []row;
     }
 }
 
+/**
+ * Determine if given projection collision point should be drawn with
+ * special corner character instead of regular wall character
+ *
+ * @param y_test Projection y coordinate
+ * @param x_test Projection x coordinate
+ *
+ * @return Bool where "true" indicates corner character should be used
+ */
 bool Frame::is_corner(const double y_test, const double x_test) {
     return (fabs(round(y_test) - y_test) <= corner_resolution &&
         fabs(round(x_test) - x_test) <= corner_resolution);
 }
 
+/**
+ * Given player's current orientation within map, determine which characters
+ * belong at each screen position.
+ *
+ * @return void
+ */
 void Frame::render() {
     double ray_angle, dist, y_test, x_test, ceiling, floor, floor_dist_factor;
 
