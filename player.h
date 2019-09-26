@@ -1,3 +1,11 @@
+/**
+ * @file player.h
+ * @author Jake Hansen
+ *
+ * Header for Player class to record player's orientation and movement
+ * information.
+ */
+
 #ifndef PLAYER_H
 #define PLAYER_H
 
