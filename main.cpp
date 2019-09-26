@@ -1,3 +1,10 @@
+/**
+ * @file main.cpp
+ * @author Jake Hansen
+ *
+ * 3D environment rendered in ASCII
+ */
+
 #define _XOPEN_SOURCE_EXTENDED
 #include <locale.h>
 #include <ncursesw/curses.h>
@@ -19,6 +26,13 @@ using std::chrono::duration;
 using std::cout;
 using std::endl;
 
+/**
+ * Update the image displayed on the terminal screen.
+ *
+ * @param frame Frame object containing current screen state
+ *
+ * @return void
+ */
 void draw(const Frame &frame) {
     move(0, 0);
     for (auto &row : frame.picture) {
@@ -59,21 +73,23 @@ int main(int argc, char* argv[]) {
     double fov = M_PI / 3.0;
     double walk_speed = 0.1;
     double turn_speed = 0.2;
-    Player player(&game_map, p_y, p_x, p_view_angle, fov, walk_speed, turn_speed);
+    Player player(&game_map, p_y, p_x, p_view_angle, fov, walk_speed,
+        turn_speed);
 
     // Frame
     int render_dist = 15;
     double corner_resolution = 0.1;
     int frame_rate = 60;
     double frame_period = 1 / (double)frame_rate;
-    Frame frame(&game_map, &player, screen_rows, screen_cols, render_dist, corner_resolution);
+    Frame frame(&game_map, &player, screen_rows, screen_cols, render_dist,
+        corner_resolution);
 
     int ch = 0;
     auto prev = system_clock::now();
     auto cur = system_clock::now();
     double frame_duration;
     while (true) {
-        // Make game run at same pace regardless of processor speed or load
+        // Enforce constant frame rate
         cur = system_clock::now();
         duration<double> delta = cur - prev;
         frame_duration = delta.count();
@@ -107,7 +123,9 @@ int main(int argc, char* argv[]) {
             }
         }
 
+        // Render (prepare) current screen state
         frame.render();
+        // Display current screen state
         draw(frame);
 
         // If necessary, wait enough time to ensure desired frame rate
@@ -116,6 +134,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    // Restore terminal to original state
     curs_set(1);
     endwin();
 

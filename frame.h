@@ -1,9 +1,18 @@
+/**
+ * @file frame.h
+ * @author Jake Hansen
+ *
+ * Header for class to render player's view within terminal emulator using ASCII
+ * characters.
+ */
+
 #ifndef FRAME_H
 #define FRAME_H
 
 #include <vector>
 #include <string>
 #include <utility>
+#include <omp.h>
 #include "game_map.h"
 #include "player.h"
 

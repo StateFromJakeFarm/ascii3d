@@ -1,4 +1,4 @@
-CXXFLAGS = -std=c++11 -Wall -W -Werror -pedantic -g
+CXXFLAGS = -std=c++11 -fopenmp -Wall -W -Werror -pedantic -g
 CXXLINKS = -lncursesw -lm
 CXX = g++
 PROG = game

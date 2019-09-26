@@ -39,12 +39,15 @@ void Frame::render() {
 
         // Calculate distance from player to wall (or edge of map) for this ray
         dist = 0.0;
+        short map_char;
         do {
             dist += 0.1;
 
             y_test = player_ptr->get_y() + cos(ray_angle) * dist;
             x_test = player_ptr->get_x() + sin(ray_angle) * dist;
-        } while (dist <= render_dist && game_map_ptr->at(y_test, x_test) != '#');
+
+            map_char = game_map_ptr->at(y_test, x_test);
+        } while (dist <= render_dist && map_char == ' ');
 
         // Determine floor and ceiling bounds
         ceiling = screen_rows / 2.0 - screen_rows / dist;
@@ -57,29 +60,46 @@ void Frame::render() {
                 // Ceiling
                 val = ' ';
             } else if (row >= ceiling && row < floor) {
-                // Wall
-                if (dist <= render_dist / 4) {
-                    if (is_corner(y_test, x_test)) {
-                        val = '|';
+                if (map_char == 'e') {
+                    // Enemy
+                    if (dist <= render_dist / 4) {
+                        val = 'E';
+                    } else if (dist <= render_dist / 3) {
+                        val = 'e';
+                    } else if (dist <= render_dist / 2) {
+                        val = 'e';
+                    } else if (dist <= render_dist) {
+                        val = 'e';
                     } else {
-                        val = 0x2588;
-                    }
-                } else if (dist <= render_dist / 3) {
-                    if (is_corner(y_test, x_test)) {
                         val = ' ';
-                    } else {
-                        val = 0x2593;
                     }
-                } else if (dist <= render_dist / 2) {
-                    val = 0x2592;
-                } else if (dist <= render_dist) {
-                    val = 0x2591;
                 } else {
-                    val = ' ';
+                    // Wall
+                    if (dist <= render_dist / 4) {
+                        if (is_corner(y_test, x_test)) {
+                            val = '|';
+                        } else {
+                            val = 0x2588;
+                        }
+                    } else if (dist <= render_dist / 3) {
+                        if (is_corner(y_test, x_test)) {
+                            val = ' ';
+                        } else {
+                            val = 0x2593;
+                        }
+                    } else if (dist <= render_dist / 2) {
+                        val = 0x2592;
+                    } else if (dist <= render_dist) {
+                        val = 0x2591;
+                    } else {
+                        val = ' ';
+                    }
                 }
             } else {
                 // Floor
-                floor_dist_factor = (double)(row - (screen_rows / 2)) / (double)(screen_rows / 2);
+                floor_dist_factor = (double)(row - (screen_rows / 2)) /
+                    (double)(screen_rows / 2);
+
                 if (floor_dist_factor >= 0.75) {
                     val = '#';
                 } else if (floor_dist_factor >= 0.4) {
