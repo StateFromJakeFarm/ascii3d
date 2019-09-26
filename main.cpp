@@ -88,7 +88,8 @@ int main(int argc, char* argv[]) {
     auto prev = system_clock::now();
     auto cur = system_clock::now();
     double frame_duration;
-    while (true) {
+    bool run = true;
+    while (run) {
         // Enforce constant frame rate
         cur = system_clock::now();
         duration<double> delta = cur - prev;
@@ -119,6 +120,10 @@ int main(int argc, char* argv[]) {
 
                 case 'a':
                     player.strafe_left();
+                    break;
+
+                case 'q':
+                    run = false;
                     break;
             }
         }
