@@ -54,7 +54,7 @@ GameMap::GameMap(string file) {
  */
 char GameMap::at(const int row, const int col) {
     if (row < 0 || col < 0 || row >= height || col >= width) {
-        return '.';
+        return ' ';
     }
 
     return map[row][col];
