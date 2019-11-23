@@ -104,40 +104,25 @@ void Frame::render() {
                 // Ceiling
                 val = ' ';
             } else if (row >= ceiling && row < floor) {
-                if (map_char == 'e') {
-                    // Enemy
-                    if (dist <= render_dist / 4) {
-                        val = 'E';
-                    } else if (dist <= render_dist / 3) {
-                        val = 'e';
-                    } else if (dist <= render_dist / 2) {
-                        val = 'e';
-                    } else if (dist <= render_dist) {
-                        val = 'e';
+                // Wall
+                if (dist <= render_dist / 4) {
+                    if (is_corner(y_test, x_test)) {
+                        val = '|';
                     } else {
-                        val = ' ';
+                        val = 0x2588;
                     }
+                } else if (dist <= render_dist / 3) {
+                    if (is_corner(y_test, x_test)) {
+                        val = ' ';
+                    } else {
+                        val = 0x2593;
+                    }
+                } else if (dist <= render_dist / 2) {
+                    val = 0x2592;
+                } else if (dist <= render_dist) {
+                    val = 0x2591;
                 } else {
-                    // Wall
-                    if (dist <= render_dist / 4) {
-                        if (is_corner(y_test, x_test)) {
-                            val = '|';
-                        } else {
-                            val = 0x2588;
-                        }
-                    } else if (dist <= render_dist / 3) {
-                        if (is_corner(y_test, x_test)) {
-                            val = ' ';
-                        } else {
-                            val = 0x2593;
-                        }
-                    } else if (dist <= render_dist / 2) {
-                        val = 0x2592;
-                    } else if (dist <= render_dist) {
-                        val = 0x2591;
-                    } else {
-                        val = ' ';
-                    }
+                    val = ' ';
                 }
             } else {
                 // Floor
